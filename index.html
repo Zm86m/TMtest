@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Screen</title>
+</head>
+<body>
+    <h1>Shared Content</h1>
+    <div id="sharedContent">Waiting for content...</div>
+
+    <script>
+        function updateContent() {
+            fetch('https://curly-space-robot-g4x69v4xjqgvfg6j-2316.app.github.dev/share')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('sharedContent').innerText = data.content;
+                });
+        }
+
+        // Update the content every 2 seconds
+        setInterval(updateContent, 2000);
+    </script>
+</body>
+</html>
