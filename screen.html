@@ -13,7 +13,7 @@
     <script>
         document.getElementById('sendBtn').addEventListener('click', () => {
             const content = document.getElementById('screenInput').value;
-            fetch('/share', {
+            fetch('https://curly-space-robot-g4x69v4xjqgvfg6j-2316.app.github.dev/share', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
