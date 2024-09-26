@@ -1,24 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Screen</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bidding System</title>
 </head>
 <body>
-    <h1>Shared Content</h1>
-    <div id="sharedContent">Waiting for content...</div>
+  <h1>Bidding System</h1>
 
-    <script>
-        function updateContent() {
-            fetch('https://curly-space-robot-g4x69v4xjqgvfg6j-2316.app.github.dev/share')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('sharedContent').innerText = data.content || 'No content shared yet';
-                })
-                .catch(error => console.log('Error:', error));
-        }
-        setInterval(updateContent, 2000);
-    </script>
+  <div>
+    <input type="text" id="username" placeholder="Enter your name">
+    <button onclick="joinLobby()">Join Lobby</button>
+  </div>
+
+  <div id="lobby-status"></div>
+  <div id="offers"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io('https://curly-space-robot-g4x69v4xjqgvfg6j-2316.app.github.dev');
+
+    function joinLobby() {
+      const username = document.getElementById('username').value;
+
+      fetch('https://curly-space-robot-g4x69v4xjqgvfg6j-2316.app.github.dev/join-lobby', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username })
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('lobby-status').textContent = `Lobby ID: ${data.lobbyId}, Status: ${data.status}`;
+        socket.emit('join-room', data.lobbyId);
+      });
+    }
+
+    socket.on('lobby-update', (lobby) => {
+      document.getElementById('offers').textContent = `Current offers: ${JSON.stringify(lobby.offers)}`;
+    });
+
+    socket.on('winner-announced', (winner) => {
+      alert(`The winner is ${winner}`);
+    });
+  </script>
 </body>
 </html>
