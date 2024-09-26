@@ -1,34 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Screen</title>
+  <title>Admin - Add Items</title>
 </head>
 <body>
-    <h1>Screen Content</h1>
-    <textarea id="screenInput" placeholder="Type something..."></textarea>
-    <button id="sendBtn">Share</button>
+  <h1>Add Items for Bidding</h1>
 
-    <script>
-        document.getElementById('sendBtn').addEventListener('click', () => {
-            const content = document.getElementById('screenInput').value;
-            
-            // Send content to the server
-            fetch('https://curly-space-robot-g4x69v4xjqgvfg6j-2316.app.github.dev/share', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ content: content }), // Send content as JSON
-            }).then(response => {
-                if (response.ok) {
-                    alert('Content shared!');
-                } else {
-                    alert('Error sharing content');
-                }
-            }).catch(error => console.log('Error:', error));
-        });
-    </script>
+  <div>
+    <input type="text" id="item-name" placeholder="Item Name">
+    <input type="text" id="starting-price" placeholder="Starting Price">
+    <button onclick="addItem()">Add Item</button>
+  </div>
+
+  <script>
+    function addItem() {
+      const itemName = document.getElementById('item-name').value;
+      const startingPrice = document.getElementById('starting-price').value;
+
+      fetch('https://curly-space-robot-g4x69v4xjqgvfg6j-2316.app.github.dev/admin/add-item', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ itemName, startingPrice })
+      })
+      .then(res => res.text())
+      .then(message => alert(message));
+    }
+  </script>
 </body>
 </html>
